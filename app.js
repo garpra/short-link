@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require("path");
+const authRoutes = require("./routes/auth");
 
 const app = express();
 
@@ -18,5 +19,7 @@ app.get("/login", (req, res) => {
 app.get("/signup", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "signup.html"));
 });
+
+app.use(authRoutes);
 
 module.exports = app;
