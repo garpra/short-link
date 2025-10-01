@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const session = require("express-session");
 const authRoutes = require("./routes/auth");
+const urlRoutes = require("./routes/urls");
 
 const app = express();
 
@@ -33,5 +34,6 @@ app.get("/signup", (req, res) => {
 });
 
 app.use(authRoutes);
+app.use(urlRoutes);
 
 module.exports = app;
