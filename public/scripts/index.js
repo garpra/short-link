@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const userNav = document.getElementById("user-nav");
+  const tableContainer = document.getElementById("table-container");
 
   const response = await fetch("/user/status");
   const data = await response.json();
@@ -13,6 +14,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <button class="btn btn-outline-danger rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#logoutModal">Logout</button>
               </li>
             `;
+    tableContainer.hidden = !tableContainer.hidden;
 
     const logoutBtn = document.getElementById("logout-button");
     logoutBtn.addEventListener("click", async () => {
