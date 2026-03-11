@@ -2,13 +2,6 @@
 
 A simple URL shortener website built with Express and SQLite.
 
-## Features
-
-- **URL Shortening:** Converting long URLs into short ones.
-- **User Authentication:** Sign up and log in to manage your links.
-- **Link Management:** View all your short URLs in one place.
-- **Click Tracking:** Track the number of clicks on your shortened links.
-
 ## Tech Stack
 
 - **Frontend:** Bootstrap 5
