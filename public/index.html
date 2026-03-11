@@ -79,7 +79,7 @@
       </div>
     </section>
 
-    <section class="container mb-5 pb-4">
+    <section class="container mb-5 pb-4" id="table-container" hidden>
       <div class="row justify-content-center">
         <div class="col-lg-10">
           <div
@@ -257,6 +257,7 @@
     <script>
       document.addEventListener("DOMContentLoaded", async () => {
         const userNav = document.getElementById("user-nav");
+        const tableContainer = document.getElementById("table-container");
 
         const response = await fetch("/api/user/status");
         const data = await response.json();
@@ -270,6 +271,7 @@
                 <button id="logout-button" class="btn btn-outline-danger rounded-pill px-4">Logout</button>
               </li>
             `;
+          tableContainer.hidden = !tableContainer.hidden;
 
           const logoutBtn = document.getElementById("logout-button");
           logoutBtn.addEventListener("click", async () => {

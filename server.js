@@ -39,9 +39,7 @@ app.post("/signup", async (req, res) => {
     `INSERT INTO users (name, email, password, created_at) VALUES (?,?,?,?)`,
   ).run(name, email, hashedPassword, Date.now());
 
-  res.json({
-    message: "User created",
-  });
+  res.redirect("/login");
 });
 
 app.post("/login", async (req, res) => {
