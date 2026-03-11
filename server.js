@@ -87,7 +87,9 @@ app.get("/api/user/status", (req, res) => {
 
 app.get("/api/user/urls", (req, res) => {
   if (!req.session.user) {
-    return;
+    return res.status(404).json({
+      message: "User tidak ditemukan",
+    });
   }
 
   const { id } = req.session.user;
@@ -99,6 +101,21 @@ app.get("/api/user/urls", (req, res) => {
   }
 });
 
+app.post("/add/url", (req, res) => {
+  const { url } = req.body;
+
+  if (!req.session.user) {
+    res.redirect("/login");
+  }
+
+  const userId = req.session.user.id;
+  db.prepare(
+    `INSERT INTO urls (user_id, short_code, original_url, created_at) VALUES (?,?,?,?)`,
+  ).run(userId, randomText(), url, Date.now());
+
+  res.redirect("/");
+});
+
 app.get("/logout", (req, res) => {
   req.session.destroy(() => {
     res.clearCookie("connect.sid");
@@ -107,5 +124,18 @@ app.get("/logout", (req, res) => {
     });
   });
 });
+
+function randomText(length = 5) {
+  const chars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * chars.length);
+    result += chars[randomIndex];
+  }
+
+  return result;
+}
 
 app.listen(port);

@@ -60,16 +60,19 @@
           <div class="col-md-8 col-lg-6">
             <form
               class="d-flex gap-2 p-2 bg-dark rounded-pill border border-secondary shadow-lg"
+              action="/add/url"
+              method="post"
             >
               <input
                 type="url"
+                name="url"
                 class="form-control form-control-lg border-0 bg-transparent text-light shadow-none"
                 placeholder="Paste your link here..."
                 required
               />
               <button
                 class="btn btn-primary rounded-pill px-4 fw-medium"
-                type="button"
+                type="submit"
               >
                 Shorten
               </button>
