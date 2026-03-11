@@ -90,7 +90,6 @@
               class="card-header border-secondary p-4 d-flex justify-content-between align-items-center"
             >
               <h5 class="fw-semibold m-0">Your Latest Links</h5>
-              <span class="badge bg-primary rounded-pill">3 Active Links</span>
             </div>
             <div class="card-body p-0">
               <div class="table-responsive">
@@ -122,128 +121,7 @@
                       </th>
                     </tr>
                   </thead>
-                  <tbody>
-                    <tr>
-                      <td class="px-4 py-3 border-secondary">
-                        <a
-                          href="#"
-                          class="text-decoration-none text-primary fw-medium d-block mb-1"
-                          ><i class="bi bi-link-45deg"></i> sho.rt/promo24</a
-                        >
-                        <span class="text-secondary" style="font-size: 0.8rem"
-                          >Added 2 hours ago</span
-                        >
-                      </td>
-                      <td
-                        class="py-3 border-secondary text-truncate"
-                        style="max-width: 250px"
-                      >
-                        <span class="text-light"
-                          >https://tokosaya.com/campaign/promo-akhir-tahun-2024-diskon-besar</span
-                        >
-                      </td>
-                      <td class="text-center py-3 border-secondary">
-                        <span
-                          class="badge bg-dark border border-secondary text-light"
-                          >142</span
-                        >
-                      </td>
-                      <td class="text-end px-4 py-3 border-secondary">
-                        <button
-                          class="btn btn-sm btn-outline-secondary rounded-circle me-1"
-                          title="Copy"
-                        >
-                          <i class="bi bi-clipboard"></i>
-                        </button>
-                        <button
-                          class="btn btn-sm btn-outline-secondary rounded-circle me-1"
-                          title="QR Code"
-                        >
-                          <i class="bi bi-qr-code-scan"></i>
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="px-4 py-3 border-secondary">
-                        <a
-                          href="#"
-                          class="text-decoration-none text-primary fw-medium d-block mb-1"
-                          ><i class="bi bi-link-45deg"></i> sho.rt/ig-bio</a
-                        >
-                        <span class="text-secondary" style="font-size: 0.8rem"
-                          >Added 3 days ago</span
-                        >
-                      </td>
-                      <td
-                        class="py-3 border-secondary text-truncate"
-                        style="max-width: 250px"
-                      >
-                        <span class="text-light"
-                          >https://linktr.ee/portofoliojohndoe</span
-                        >
-                      </td>
-                      <td class="text-center py-3 border-secondary">
-                        <span
-                          class="badge bg-dark border border-secondary text-light"
-                          >1,204</span
-                        >
-                      </td>
-                      <td class="text-end px-4 py-3 border-secondary">
-                        <button
-                          class="btn btn-sm btn-outline-secondary rounded-circle me-1"
-                          title="Copy"
-                        >
-                          <i class="bi bi-clipboard"></i>
-                        </button>
-                        <button
-                          class="btn btn-sm btn-outline-secondary rounded-circle me-1"
-                          title="QR Code"
-                        >
-                          <i class="bi bi-qr-code-scan"></i>
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="px-4 py-3 border-secondary border-0">
-                        <a
-                          href="#"
-                          class="text-decoration-none text-primary fw-medium d-block mb-1"
-                          ><i class="bi bi-link-45deg"></i> sho.rt/mc-lore</a
-                        >
-                        <span class="text-secondary" style="font-size: 0.8rem"
-                          >Added 1 week ago</span
-                        >
-                      </td>
-                      <td
-                        class="py-3 border-secondary border-0 text-truncate"
-                        style="max-width: 250px"
-                      >
-                        <span class="text-light"
-                          >https://youtube.com/watch?v=herobrine-history-explain</span
-                        >
-                      </td>
-                      <td class="text-center py-3 border-secondary border-0">
-                        <span
-                          class="badge bg-dark border border-secondary text-light"
-                          >56</span
-                        >
-                      </td>
-                      <td class="text-end px-4 py-3 border-secondary border-0">
-                        <button
-                          class="btn btn-sm btn-outline-secondary rounded-circle me-1"
-                          title="Copy"
-                        >
-                          <i class="bi bi-clipboard"></i>
-                        </button>
-                        <button
-                          class="btn btn-sm btn-outline-secondary rounded-circle me-1"
-                          title="QR Code"
-                        >
-                          <i class="bi bi-qr-code-scan"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
+                  <tbody id="urls-table-body"></tbody>
                 </table>
               </div>
             </div>
@@ -272,6 +150,63 @@
               </li>
             `;
           tableContainer.hidden = !tableContainer.hidden;
+
+          const fetchUrls = await fetch("/api/user/urls");
+          const urls = await fetchUrls.json();
+
+          const tableBody = document.getElementById("urls-table-body");
+          tableBody.innerHTML = "";
+
+          urls.forEach((url) => {
+            const date = new Date(url.created_at);
+            const tableRow = `
+              <tr>
+                <td class="px-4 py-3 border-secondary">
+                  <a
+                    href="/${url.short_code}"
+                    target="_blank"
+                    class="text-decoration-none text-primary fw-medium d-block mb-1"
+                    ><i class="bi bi-link-45deg"></i> sho.rt/${
+                      url.short_code
+                    }</a
+                  >
+                  <span class="text-secondary" style="font-size: 0.8rem"
+                    >Added ${date.toLocaleDateString()}</span
+                  >
+                </td>
+                <td
+                  class="py-3 border-secondary text-truncate"
+                  style="max-width: 250px"
+                >
+                  <span class="text-light"
+                    >${url.original_url}</span
+                  >
+                </td>
+                <td class="text-center py-3 border-secondary">
+                  <span
+                    class="badge bg-dark border border-secondary text-light"
+                    >${url.click_count}</span
+                  >
+                </td>
+                <td class="text-end px-4 py-3 border-secondary">
+                  <button
+                    class="btn btn-sm btn-outline-secondary rounded-circle me-1"
+                    title="Copy"
+                  >
+                    <i class="bi bi-clipboard"></i>
+                  </button>
+                  <button
+                    class="btn btn-sm btn-outline-secondary rounded-circle me-1"
+                    title="QR Code"
+                  >
+                    <i class="bi bi-qr-code-scan"></i>
+                  </button>
+                </td>
+              </tr>
+            `;
+
+            tableBody.innerHTML += tableRow;
+          });
 
           const logoutBtn = document.getElementById("logout-button");
           logoutBtn.addEventListener("click", async () => {

@@ -85,6 +85,20 @@ app.get("/api/user/status", (req, res) => {
   }
 });
 
+app.get("/api/user/urls", (req, res) => {
+  if (!req.session.user) {
+    return;
+  }
+
+  const { id } = req.session.user;
+  if (id) {
+    const userUrls = db
+      .prepare(`SELECT * FROM urls WHERE user_id = @id`)
+      .all({ id: id });
+    res.json(userUrls);
+  }
+});
+
 app.get("/logout", (req, res) => {
   req.session.destroy(() => {
     res.clearCookie("connect.sid");
