@@ -133,6 +133,84 @@
       </div>
     </section>
 
+    <!-- Logout Modal -->
+    <div
+      class="modal fade"
+      id="logoutModal"
+      tabindex="-1"
+      aria-labelledby="logoutModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="logoutModalLabel">Confirm Logout</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+
+          <div class="modal-body">
+            Are you sure you want to log out of this account?
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+
+            <button id="logout-button" class="btn btn-danger">Logout</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete Modal -->
+    <div
+      class="modal fade"
+      id="deleteModal"
+      tabindex="-1"
+      aria-labelledby="deleteModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+
+          <div class="modal-body">
+            Are you sure you want to delete this data?
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+
+            <button id="delete-button" class="btn btn-danger">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
@@ -149,7 +227,7 @@
                 <span class="nav-link">Welcome, ${data.user.name.split(" ")[0]}</span>
               </li>
               <li class="nav-item ms-lg-2">
-                <button id="logout-button" class="btn btn-outline-danger rounded-pill px-4">Logout</button>
+                <button class="btn btn-outline-danger rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#logoutModal">Logout</button>
               </li>
             `;
           tableContainer.hidden = !tableContainer.hidden;
@@ -162,53 +240,54 @@
 
           urls.forEach((url) => {
             const date = new Date(url.created_at);
-            const tableRow = `
-              <tr>
-                <td class="px-4 py-3 border-secondary">
-                  <a
-                    href="/${url.short_code}"
-                    target="_blank"
-                    class="text-decoration-none text-primary fw-medium d-block mb-1"
-                    ><i class="bi bi-link-45deg"></i> sho.rt/${
-                      url.short_code
-                    }</a
-                  >
-                  <span class="text-secondary" style="font-size: 0.8rem"
-                    >Added ${date.toLocaleDateString()}</span
-                  >
-                </td>
-                <td
-                  class="py-3 border-secondary text-truncate"
-                  style="max-width: 250px"
-                >
-                  <span class="text-light"
-                    >${url.original_url}</span
-                  >
-                </td>
-                <td class="text-center py-3 border-secondary">
-                  <span
-                    class="badge bg-dark border border-secondary text-light"
-                    >${url.click_count}</span
-                  >
-                </td>
-                <td class="text-end px-4 py-3 border-secondary">
-                  <button
-                    class="btn btn-sm btn-outline-secondary rounded-circle me-1"
-                    title="Copy"
-                  >
-                    <i class="bi bi-clipboard"></i>
-                  </button>
-                  <a href="/delete/url/${url.id}" target="_blank"
-                    class="btn btn-sm btn-outline-secondary rounded-circle me-1"
-                    title="Delete"
-                  >
-                    <i class="bi bi-trash"></i>
-                  </button>
-                </td>
-              </tr>
-            `;
 
-            tableBody.innerHTML += tableRow;
+            const tableRow = `
+                <tr>
+                  <td class="px-4 py-3 border-secondary">
+                    <a
+                      href="/${url.short_code}"
+                      target="_blank"
+                      class="text-decoration-none text-primary fw-medium d-block mb-1"
+                    >
+                      <i class="bi bi-link-45deg"></i> sho.rt/${url.short_code}
+                    </a>
+                    <span class="text-secondary" style="font-size: 0.8rem">
+                      Added ${date.toLocaleDateString()}
+                    </span>
+                  </td>
+
+                  <td class="py-3 border-secondary text-truncate" style="max-width: 250px">
+                    <span class="text-light">${url.original_url}</span>
+                  </td>
+
+                  <td class="text-center py-3 border-secondary">
+                    <span class="badge bg-dark border border-secondary text-light">
+                      ${url.click_count}
+                    </span>
+                  </td>
+
+                  <td class="text-end px-4 py-3 border-secondary">
+                    <button
+                      class="btn btn-sm btn-outline-secondary rounded-circle me-1"
+                      title="Copy"
+                    >
+                      <i class="bi bi-clipboard"></i>
+                    </button>
+
+                    <button
+                      class="btn btn-sm btn-outline-secondary rounded-circle me-1 delete-btn"
+                      title="Delete"
+                      data-id="${url.id}"
+                      data-bs-toggle="modal"
+                      data-bs-target="#deleteModal"
+                    >
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+                `;
+
+            tableBody.insertAdjacentHTML("beforeend", tableRow);
           });
 
           const logoutBtn = document.getElementById("logout-button");
@@ -218,6 +297,29 @@
           });
         }
       });
+
+      let deleteId = null;
+
+      document.addEventListener("click", (e) => {
+        const btn = e.target.closest(".delete-btn");
+        if (btn) deleteId = btn.dataset.id;
+      });
+
+      document
+        .getElementById("delete-button")
+        .addEventListener("click", async () => {
+          if (!deleteId) return;
+
+          const response = await fetch(`/delete/url/${deleteId}`, {
+            method: "DELETE",
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            window.location.href = "/";
+          }
+        });
     </script>
   </body>
 </html>

@@ -50,7 +50,7 @@ function deleteUrl(req, res) {
   }
 
   urlService.deleteUrl(id);
-  res.redirect("/");
+  res.json({ success: true });
 }
 
 module.exports = {
