@@ -60,7 +60,7 @@
           <div class="col-md-8 col-lg-6">
             <form
               class="d-flex gap-2 p-2 bg-dark rounded-pill border border-secondary shadow-lg"
-              action="/api/add/url"
+              action="/add/url"
               method="post"
             >
               <input
@@ -140,7 +140,7 @@
         const userNav = document.getElementById("user-nav");
         const tableContainer = document.getElementById("table-container");
 
-        const response = await fetch("/api/user/status");
+        const response = await fetch("/user/status");
         const data = await response.json();
 
         if (data.loggedIn) {
@@ -154,7 +154,7 @@
             `;
           tableContainer.hidden = !tableContainer.hidden;
 
-          const fetchUrls = await fetch("/api/user/urls");
+          const fetchUrls = await fetch("/user/urls");
           const urls = await fetchUrls.json();
 
           const tableBody = document.getElementById("urls-table-body");
@@ -213,7 +213,7 @@
 
           const logoutBtn = document.getElementById("logout-button");
           logoutBtn.addEventListener("click", async () => {
-            await fetch("/logout");
+            await fetch("/auth/logout");
             window.location.reload();
           });
         }

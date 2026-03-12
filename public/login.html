@@ -24,7 +24,7 @@
           <p class="text-secondary mt-2 mb-0">Welcome back</p>
         </div>
 
-        <form action="/login" method="post">
+        <form>
           <div class="mb-3">
             <label class="form-label text-secondary small">Email</label>
             <input
@@ -86,7 +86,7 @@
           data[key] = value;
         });
 
-        const response = await fetch("/login", {
+        const response = await fetch("/auth/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

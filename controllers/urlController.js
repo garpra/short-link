@@ -4,7 +4,7 @@ const { randomText } = require("../utils/utils");
 function getUserUrls(req, res) {
   if (!req.session.user) {
     return res.status(404).json({
-      message: "User tidak ditemukan",
+      message: "User not found",
     });
   }
 
@@ -30,15 +30,15 @@ function addUrl(req, res) {
 }
 
 function getUrl(req, res) {
-    const { shortCode } = req.params;
-    const url = urlService.getUrlByShortCode(shortCode);
-  
-    if (url) {
-      urlService.incrementClickCount(shortCode);
-      res.redirect(url.original_url);
-    } else {
-      res.status(404).send("Not found");
-    }
+  const { shortCode } = req.params;
+  const url = urlService.getUrlByShortCode(shortCode);
+
+  if (url) {
+    urlService.incrementClickCount(shortCode);
+    res.redirect(url.original_url);
+  } else {
+    res.status(404).send("Not found");
+  }
 }
 
 module.exports = {
