@@ -41,8 +41,21 @@ function getUrl(req, res) {
   }
 }
 
+function deleteUrl(req, res) {
+  const { id } = req.params;
+  if (!id) {
+    return res.status(404).json({
+      message: "Id not found",
+    });
+  }
+
+  urlService.deleteUrl(id);
+  res.redirect("/");
+}
+
 module.exports = {
   getUserUrls,
   addUrl,
   getUrl,
+  deleteUrl,
 };
